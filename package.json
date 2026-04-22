@@ -31,12 +31,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/quitequinn/sanity-search-and-delete.git"
+    "url": "https://github.com/Liiift-Studio/sanity-search-and-delete.git"
   },
   "bugs": {
-    "url": "https://github.com/quitequinn/sanity-search-and-delete/issues"
+    "url": "https://github.com/Liiift-Studio/sanity-search-and-delete/issues"
   },
-  "homepage": "https://github.com/quitequinn/sanity-search-and-delete#readme",
+  "homepage": "https://github.com/Liiift-Studio/sanity-search-and-delete#readme",
   "peerDependencies": {
     "@sanity/ui": "^1.0.0",
     "react": "^18.0.0",
