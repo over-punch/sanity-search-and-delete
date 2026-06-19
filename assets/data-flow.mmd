@@ -1,0 +1,19 @@
+%% Search -> select -> delete data flow for @liiift-studio/sanity-search-and-delete
+%% Reproducible source. Render with: npm run capture
+flowchart TD
+    A[Enter search term + pick document type] --> B[GROQ query runs via Sanity client]
+    B --> C{Results found?}
+    C -->|No| A
+    C -->|Yes| D[Review matched documents in list]
+    D --> E[Select the documents to delete]
+    E --> F{Danger mode unlocked<br/>and confirmation given?}
+    F -->|No - blocked| D
+    F -->|Yes| G[Batched delete via Sanity client]
+    G --> H[(Documents permanently removed<br/>cannot be undone)]
+
+    classDef danger fill:#fdecea,stroke:#c0392b,color:#922,stroke-width:2px;
+    classDef gate fill:#fff6e5,stroke:#e6a23c,color:#8a6d3b;
+    classDef store fill:#eef4fb,stroke:#3b78c3,color:#234;
+    class H danger;
+    class F,C gate;
+    class B,G store;
