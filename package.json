@@ -1,6 +1,6 @@
 {
 	"name": "@liiift-studio/sanity-search-and-delete",
-	"version": "2.0.0",
+	"version": "2.0.1",
 	"description": "Flexible search and delete utility for Sanity Studio — bulk content management with danger mode safety features",
 	"main": "dist/index.js",
 	"module": "dist/index.js",
