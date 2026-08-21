@@ -17,10 +17,9 @@ import {
   Grid,
   Select,
   Checkbox,
-  Spinner,
-  Toast
-} from '@sanity/ui'
-import { SearchIcon, TrashIcon, WarningOutlineIcon } from '@sanity/icons'
+  Spinner
+} from '@liiift-studio/sanity-ui-compat'
+import { SearchIcon, TrashIcon, WarningOutlineIcon } from '@liiift-studio/sanity-ui-compat/icons'
 import { SanityClient } from 'sanity'
 
 // Types
