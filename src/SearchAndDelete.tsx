@@ -23,7 +23,9 @@ import { SearchIcon, TrashIcon, WarningOutlineIcon } from '@liiift-studio/sanity
 import { SanityClient } from 'sanity'
 
 // Types
-interface SearchResult {
+
+/** A single document returned by a search query, with arbitrary extra projected fields. */
+export interface SearchResult {
   _id: string
   _type: string
   title?: string
@@ -31,10 +33,19 @@ interface SearchResult {
   [key: string]: any
 }
 
-interface SearchAndDeleteProps {
+/** Summary handed to `onComplete` once a delete run finishes. */
+export interface DeleteResult {
+  /** Count of documents successfully deleted. */
+  deleted: number
+  /** Human-readable failure messages, one per document that could not be deleted. */
+  errors: string[]
+}
+
+/** Props accepted by the SearchAndDelete component. */
+export interface SearchAndDeleteProps {
   client: SanityClient
   documentTypes?: string[]
-  onComplete?: (results: { deleted: number; errors: string[] }) => void
+  onComplete?: (results: DeleteResult) => void
   onError?: (error: string) => void
   batchSize?: number
   dryRun?: boolean
