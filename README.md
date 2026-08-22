@@ -2,6 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/@liiift-studio/sanity-search-and-delete.svg)](https://www.npmjs.com/package/@liiift-studio/sanity-search-and-delete)
 [![license](https://img.shields.io/npm/l/@liiift-studio/sanity-search-and-delete.svg)](#license)
+[![Sanity Studio v3–v6](https://img.shields.io/badge/Sanity%20Studio-v3%20%E2%80%93%20v6-f03e2f.svg)](https://www.sanity.io/)
 
 A flexible search and delete utility for Sanity Studio that enables bulk content management with comprehensive safety features. Works with any document type and provides powerful search capabilities.
 
@@ -222,12 +223,62 @@ For advanced users, enable custom GROQ queries:
 
 ## Requirements
 
-This package declares the following peer dependencies (install them in your Studio):
+This package declares the following peer dependencies — **one build supports Sanity
+Studio v3, v4, v5 and v6**:
 
-- `sanity` — `^3.0.0 || ^4.0.0 || ^5.0.0`
-- `react` — `^18.0.0 || ^19.0.0`
-- `@sanity/ui` — `^1.0.0 || ^2.0.0 || ^3.0.0`
-- `@sanity/icons` — `^2.0.0 || ^3.0.0`
+| Peer | Declared range | Meaning |
+|------|----------------|---------|
+| `sanity` | `>=3 <7` | Studio v3 through v6 |
+| `@sanity/ui` | `>=2 <5` | v2, v3, v4 — see the note below, `<5` is **not** a mistake |
+| `@sanity/icons` | `>=2 <6` | v2 through v5 |
+| `react` | `^18.0.0 \|\| ^19.0.0` | React 18 or 19 |
+
+> **`@sanity/ui` is capped below v5 on purpose.** Studio v6 ships **`@sanity/ui` v4**,
+> not v5, so `>=2 <5` is the correct range for a v6 Studio. It reads like a bug at a
+> glance; it isn't.
+
+### How one build spans four Studio majors
+
+Two upstream breaking changes make naive imports fail across these majors:
+
+- **`@sanity/ui` v4** moved `Tooltip`, `Menu`, `MenuButton`, `MenuItem`, `Code`,
+  `Popover`, `Autocomplete`, `Toast` and `useToast` out of the package root and into
+  **subpath entries**.
+- **`@sanity/icons` v5** removed **every named `*Icon` export**.
+
+The trap is that **both packages still _declare_ the removed names in their `.d.ts`,
+typed `never`**. A named import therefore type-checks, compiles, and bundles cleanly —
+and then throws at runtime in the Studio. `tsc` and your bundler will both tell you it
+is fine.
+
+So this package **imports no `@sanity/ui` or `@sanity/icons` symbol directly**. Every
+component and icon routes through
+[`@liiift-studio/sanity-ui-compat`](https://www.npmjs.com/package/@liiift-studio/sanity-ui-compat),
+which resolves the *installed* namespace at runtime and picks the right root-or-subpath
+location per major. That indirection — not a version-matrix build — is what makes a
+single artifact work on v3 through v6.
+
+> **Unlike its sibling tools, this package does _not_ bundle the compat layer.** Its
+> build marks `@liiift-studio/*` as external, so `dist/index.js` keeps a real runtime
+> `import … from "@liiift-studio/sanity-ui-compat"`. It is declared in `dependencies`,
+> so a normal `npm install` fetches it — but if you vendor `dist/` by hand, or install
+> with `--no-optional`-style pruning that drops transitive deps, you must ensure
+> `@liiift-studio/sanity-ui-compat` is present or the import will fail to resolve.
+
+### Verification status
+
+v3–v6 support rests on the declared peer ranges, green builds, and use in **three
+in-house Liiift Studio Studios**. It has **not** been exercised broadly in a running
+Sanity 6 Studio beyond those. Treat v6 as supported-and-believed-good rather than
+extensively field-tested, and please file an issue if you hit a gap.
+
+### TypeScript
+
+The published package **does not declare a `types` field**, so TypeScript consumers get
+no bundled declarations and the import resolves as untyped. `src/` ships in the tarball
+and `src/SearchAndDelete.tsx` carries the real `SearchAndDeleteProps`, `SearchResult`
+and `DeleteResult` interfaces — use the [Props](#props) table above as the contract, or
+declare a local module shim.
 
 ## Regenerating the diagram
 
@@ -239,9 +290,48 @@ npm run capture   # renders assets/*.mmd -> assets/*.svg via mermaid-cli
 
 Edit `assets/data-flow.mmd` and re-run `npm run capture` to update it (bump the `?v=N` cache-buster in the README image URL on regenerate).
 
-## Maintainer note
+## Maintainer note — two implementations under `src/`
 
-The repo currently contains two implementations under `src/`: the comprehensive component documented above (`SearchAndDelete.tsx`, the source the published `dist` was built from) and a newer, foundry-specific danger-mode variant (`SearchAndDelete.jsx`, which the `build` script now targets). This README documents the **currently published** API. Reconcile the two sources before the next publish so the shipped `dist`, its props, and these docs stay in agreement.
+The repo contains **two** implementations of the component:
+
+| File | What it is | Shipped? |
+|---|---|---|
+| `src/SearchAndDelete.tsx` | The comprehensive component documented above | **Yes — this is what `dist` is built from** |
+| `src/SearchAndDelete.jsx` | A foundry-specific `dangerMode` variant (`dangerMode`, `utilityId`, `onDangerModeChange`, `displayName`, `icon` props) | **No — currently dead code** |
+
+**Which one ships is easy to get wrong.** The `build` script's entry is
+`src/index.jsx`, which looks like it selects the `.jsx` implementation — but that file
+only does `export { default } from './SearchAndDelete'`, an **extensionless** specifier.
+esbuild's default `--resolve-extensions` order is `.tsx,.ts,.jsx,.js,…`, so it resolves
+**`SearchAndDelete.tsx`**, not the `.jsx` sitting beside it.
+
+You can confirm this from the build output rather than taking it on trust:
+
+```bash
+head -1 dist/index.js          # => // src/SearchAndDelete.tsx
+grep -c dangerMode dist/index.js   # => 0  (the .jsx-only prop never ships)
+```
+
+So the [Props](#props) table above **does** describe the published package, and
+`dangerMode` / `DangerModeWarning` are **not** part of the public API despite being
+present in `src/`.
+
+This is fragile: renaming or deleting `SearchAndDelete.tsx` would silently swap the
+published component for the `.jsx` one, with entirely different props and no build
+error. Reconcile the two sources — or make the entry point's extension explicit — before
+the next publish.
+
+## Part of the Liiift Sanity Tools suite
+
+One of a family of Sanity Studio utilities by [Liiift Studio](https://liiift.studio), all
+sharing the same v3–v6 compat approach:
+
+| Package | Does |
+|---|---|
+| [`sanity-delete-unused-assets`](https://www.npmjs.com/package/@liiift-studio/sanity-delete-unused-assets) | Remove unreferenced image/file assets |
+| [`sanity-duplicate-and-rename`](https://www.npmjs.com/package/@liiift-studio/sanity-duplicate-and-rename) | Bulk-duplicate documents with templated renaming |
+| [`sanity-export-data`](https://www.npmjs.com/package/@liiift-studio/sanity-export-data) | Export document types to CSV or JSON |
+| [`sanity-ui-compat`](https://www.npmjs.com/package/@liiift-studio/sanity-ui-compat) | The compat layer these tools import instead of `@sanity/ui` |
 
 ## License
 
