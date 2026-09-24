@@ -9,13 +9,13 @@ A flexible search and delete utility for Sanity Studio that enables bulk content
 > ⚠️ **This tool deletes documents permanently.** Deletions cannot be undone from within the component. Always test against a non-production dataset first, keep a backup/export, and read the [Safety Features](#safety-features) section before using it on real content.
 
 - **Package:** [`@overpunch/sanity-search-and-delete`](https://www.npmjs.com/package/@overpunch/sanity-search-and-delete) (scoped — note the `@overpunch/` prefix)
-- **Repo / issues:** [Liiift-Studio/sanity-search-and-delete](https://github.com/Liiift-Studio/sanity-search-and-delete)
+- **Repo / issues:** [over-punch/sanity-search-and-delete](https://github.com/over-punch/sanity-search-and-delete)
 
 ## How it works
 
 The component runs a search against your dataset, lets you review and select what matched, then deletes the chosen documents — gated behind an explicit confirmation step. Nothing is removed until you confirm.
 
-![Search, select, then delete data flow: a search term and document type build a GROQ query; matched documents are reviewed and selected; deletion is gated behind a confirmation/danger-mode step before a batched delete permanently removes the documents.](https://raw.githubusercontent.com/Liiift-Studio/sanity-search-and-delete/main/assets/data-flow.svg?v=1)
+![Search, select, then delete data flow: a search term and document type build a GROQ query; matched documents are reviewed and selected; deletion is gated behind a confirmation/danger-mode step before a batched delete permanently removes the documents.](https://raw.githubusercontent.com/over-punch/sanity-search-and-delete/main/assets/data-flow.svg?v=1)
 
 ## Features
 
