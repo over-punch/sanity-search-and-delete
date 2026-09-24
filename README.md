@@ -1,14 +1,14 @@
 # Sanity Search and Delete
 
-[![npm version](https://img.shields.io/npm/v/@liiift-studio/sanity-search-and-delete.svg)](https://www.npmjs.com/package/@liiift-studio/sanity-search-and-delete)
-[![license](https://img.shields.io/npm/l/@liiift-studio/sanity-search-and-delete.svg)](#license)
+[![npm version](https://img.shields.io/npm/v/@overpunch/sanity-search-and-delete.svg)](https://www.npmjs.com/package/@overpunch/sanity-search-and-delete)
+[![license](https://img.shields.io/npm/l/@overpunch/sanity-search-and-delete.svg)](#license)
 [![Sanity Studio v3–v6](https://img.shields.io/badge/Sanity%20Studio-v3%20%E2%80%93%20v6-f03e2f.svg)](https://www.sanity.io/)
 
 A flexible search and delete utility for Sanity Studio that enables bulk content management with comprehensive safety features. Works with any document type and provides powerful search capabilities.
 
 > ⚠️ **This tool deletes documents permanently.** Deletions cannot be undone from within the component. Always test against a non-production dataset first, keep a backup/export, and read the [Safety Features](#safety-features) section before using it on real content.
 
-- **Package:** [`@liiift-studio/sanity-search-and-delete`](https://www.npmjs.com/package/@liiift-studio/sanity-search-and-delete) (scoped — note the `@liiift-studio/` prefix)
+- **Package:** [`@overpunch/sanity-search-and-delete`](https://www.npmjs.com/package/@overpunch/sanity-search-and-delete) (scoped — note the `@overpunch/` prefix)
 - **Repo / issues:** [Liiift-Studio/sanity-search-and-delete](https://github.com/Liiift-Studio/sanity-search-and-delete)
 
 ## How it works
@@ -30,7 +30,7 @@ The component runs a search against your dataset, lets you review and select wha
 ## Installation
 
 ```bash
-npm install @liiift-studio/sanity-search-and-delete
+npm install @overpunch/sanity-search-and-delete
 ```
 
 > The package is **scoped**. Installing the unscoped `sanity-search-and-delete` will pull a different, unrelated package.
@@ -43,7 +43,7 @@ npm install @liiift-studio/sanity-search-and-delete
 
 ```tsx
 import React from 'react'
-import { SearchAndDelete } from '@liiift-studio/sanity-search-and-delete'
+import { SearchAndDelete } from '@overpunch/sanity-search-and-delete'
 import { useClient } from 'sanity'
 
 const MyUtilityPage = () => {
@@ -68,7 +68,7 @@ Wrap the component in your own page, then register that page as a tool so it sho
 // MyUtilityPage.tsx — the page you register as a tool
 import React from 'react'
 import { useClient } from 'sanity'
-import { SearchAndDelete } from '@liiift-studio/sanity-search-and-delete'
+import { SearchAndDelete } from '@overpunch/sanity-search-and-delete'
 
 export default function MyUtilityPage() {
   const client = useClient({ apiVersion: '2023-01-01' })
@@ -124,7 +124,7 @@ export default defineConfig({
 ### 1. Basic Content Cleanup
 
 ```tsx
-import { SearchAndDelete } from '@liiift-studio/sanity-search-and-delete'
+import { SearchAndDelete } from '@overpunch/sanity-search-and-delete'
 
 const ContentCleanup = () => {
   const client = useClient({ apiVersion: '2023-01-01' })
@@ -268,17 +268,17 @@ and is `undefined` at runtime.
 
 So this package **imports no `@sanity/ui` or `@sanity/icons` symbol directly**. Every
 component and icon routes through
-[`@liiift-studio/sanity-ui-compat`](https://www.npmjs.com/package/@liiift-studio/sanity-ui-compat),
+[`@overpunch/sanity-ui-compat`](https://www.npmjs.com/package/@overpunch/sanity-ui-compat),
 which resolves the *installed* namespace at runtime and picks the right root-or-subpath
 location per major. That indirection — not a version-matrix build — is what makes a
 single artifact work on v3 through v6.
 
 > **Unlike its sibling tools, this package does _not_ bundle the compat layer.** Its
-> build marks `@liiift-studio/*` as external, so `dist/index.js` keeps a real runtime
-> `import … from "@liiift-studio/sanity-ui-compat"`. It is declared in `dependencies`,
+> build marks `@overpunch/*` as external, so `dist/index.js` keeps a real runtime
+> `import … from "@overpunch/sanity-ui-compat"`. It is declared in `dependencies`,
 > so a normal `npm install` fetches it — but if you vendor `dist/` by hand, or install
 > with `--no-optional`-style pruning that drops transitive deps, you must ensure
-> `@liiift-studio/sanity-ui-compat` is present or the import will fail to resolve.
+> `@overpunch/sanity-ui-compat` is present or the import will fail to resolve.
 
 ### Verification status
 
@@ -343,10 +343,10 @@ sharing the same v3–v6 compat approach:
 
 | Package | Does |
 |---|---|
-| [`sanity-delete-unused-assets`](https://www.npmjs.com/package/@liiift-studio/sanity-delete-unused-assets) | Remove unreferenced image/file assets |
-| [`sanity-duplicate-and-rename`](https://www.npmjs.com/package/@liiift-studio/sanity-duplicate-and-rename) | Bulk-duplicate documents with templated renaming |
-| [`sanity-export-data`](https://www.npmjs.com/package/@liiift-studio/sanity-export-data) | Export document types to CSV or JSON |
-| [`sanity-ui-compat`](https://www.npmjs.com/package/@liiift-studio/sanity-ui-compat) | The compat layer these tools import instead of `@sanity/ui` |
+| [`sanity-delete-unused-assets`](https://www.npmjs.com/package/@overpunch/sanity-delete-unused-assets) | Remove unreferenced image/file assets |
+| [`sanity-duplicate-and-rename`](https://www.npmjs.com/package/@overpunch/sanity-duplicate-and-rename) | Bulk-duplicate documents with templated renaming |
+| [`sanity-export-data`](https://www.npmjs.com/package/@overpunch/sanity-export-data) | Export document types to CSV or JSON |
+| [`sanity-ui-compat`](https://www.npmjs.com/package/@overpunch/sanity-ui-compat) | The compat layer these tools import instead of `@sanity/ui` |
 
 ## License
 

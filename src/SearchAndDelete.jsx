@@ -1,6 +1,6 @@
 // Search and delete component for managing Sanity documents
-import { Stack, Grid, Heading, Text, Button, TextInput, Select } from '@liiift-studio/sanity-ui-compat'
-import { TrashIcon, LockIcon, UnlockIcon, CollapseIcon, ExpandIcon } from '@liiift-studio/sanity-ui-compat/icons'
+import { Stack, Grid, Heading, Text, Button, TextInput, Select } from '@overpunch/sanity-ui-compat'
+import { TrashIcon, LockIcon, UnlockIcon, CollapseIcon, ExpandIcon } from '@overpunch/sanity-ui-compat/icons'
 import { useState, useEffect } from 'react'
 import DangerModeWarning, { shouldShowDangerWarning } from './DangerModeWarning'
 

@@ -1,5 +1,5 @@
 {
-  "name": "@liiift-studio/sanity-search-and-delete",
+  "name": "@overpunch/sanity-search-and-delete",
   "version": "2.1.1",
   "description": "Flexible search and delete utility for Sanity Studio — bulk content management with danger mode safety features",
   "main": "dist/index.js",
@@ -12,7 +12,7 @@
     "src"
   ],
   "scripts": {
-    "build": "esbuild src/index.jsx --bundle=true --format=esm --jsx=automatic --external:react --external:react-dom --external:sanity --external:@sanity/* --external:@liiift-studio/* --outfile=dist/index.js",
+    "build": "esbuild src/index.jsx --bundle=true --format=esm --jsx=automatic --external:react --external:react-dom --external:sanity --external:@sanity/* --external:@overpunch/* --outfile=dist/index.js",
     "capture": "node scripts/capture.mjs",
     "prepublishOnly": "npm run build"
   },
@@ -51,6 +51,6 @@
     "access": "public"
   },
   "dependencies": {
-    "@liiift-studio/sanity-ui-compat": "^0.1.2"
+    "@overpunch/sanity-ui-compat": "^0.1.2"
   }
 }

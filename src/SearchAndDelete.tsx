@@ -18,8 +18,8 @@ import {
   Select,
   Checkbox,
   Spinner
-} from '@liiift-studio/sanity-ui-compat'
-import { SearchIcon, TrashIcon, WarningOutlineIcon } from '@liiift-studio/sanity-ui-compat/icons'
+} from '@overpunch/sanity-ui-compat'
+import { SearchIcon, TrashIcon, WarningOutlineIcon } from '@overpunch/sanity-ui-compat/icons'
 import { SanityClient } from 'sanity'
 
 // Types
